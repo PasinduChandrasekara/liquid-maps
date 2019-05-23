@@ -1,0 +1,10 @@
+{
+  "realm": "liquid-maps",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "external",
+  "resource": "liquid-maps-frontend",
+  "credentials": {
+    "secret": "627a0a5e-5e6e-4179-bd0e-1420e03b54bd"
+  },
+  "confidential-port": 0
+}
