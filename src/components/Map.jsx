@@ -5,8 +5,13 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import Keycloak from "keycloak-js";
 
-const height = { height: "100vh" };
-const center = { lat: 6.795, lng: 79.9008 };
+const height = {
+  height: "100vh"
+};
+const center = {
+  lat: 6.795,
+  lng: 79.9008
+};
 
 class MapComponent extends Component {
   constructor(props) {
@@ -20,15 +25,24 @@ class MapComponent extends Component {
   }
 
   componentDidMount = () => {
+    var isAuthenticated =
+      this.props.match.params != undefined
+        ? this.props.match.params.authenticated
+        : false;
     const keycloak = Keycloak("/keycloak.json");
     keycloak
-      .init({ onLoad: "login-required" })
+      .init({
+        onLoad: isAuthenticated ? "check-sso" : "login-required"
+      })
       .success(authenticated => {
-        this.setState({ keycloak: keycloak, authenticated: authenticated });
-        console.log("Keycloak Token: " + this.state.keycloak.token);
+        this.setState({
+          keycloak: keycloak,
+          authenticated: authenticated
+        });
+        alert("Keycloak Token: " + this.state.keycloak.token);
       })
       .error(err => {
-        console.log(err);
+        alert(err);
       });
     const map = this.leafletMap.leafletElement;
     const geocoder = L.Control.Geocoder.nominatim();
@@ -61,14 +75,18 @@ class MapComponent extends Component {
   handleClick = () => {
     axios
       .get("http://localhost:8091/devices/register", {
-        headers: { Authorization: "Bearer " + this.state.keycloak.token },
+        headers: {
+          Authorization: "Bearer " + this.state.keycloak.token
+        },
         params: {
-          redirectUrl: "http://localhost:3000",
+          redirectUrl: "http://e636d5eb.ngrok.io",
           metaData: {}
         }
       })
       .then(res => {
-        this.setState({ qrCode: res.data.qrCode });
+        this.setState({
+          qrCode: res.data.qrCode
+        });
         console.log(res.data);
         console.log(this.state);
       });
@@ -79,19 +97,19 @@ class MapComponent extends Component {
       <div>
         <div>
           <Button variant="primary" onClick={this.handleClick}>
-            Primary
-          </Button>
+            Primary{" "}
+          </Button>{" "}
           {this.state.qrCode ? (
             <span>
               <img
                 id="qrCode"
                 src={"data:image/png;base64," + this.state.qrCode}
-              />
+              />{" "}
             </span>
           ) : (
             <span />
-          )}
-        </div>
+          )}{" "}
+        </div>{" "}
         <Map
           style={height}
           center={center}
@@ -106,10 +124,10 @@ class MapComponent extends Component {
           />
           <Marker position={center}>
             <Popup>
-              <span>You are here!</span>
-            </Popup>
-          </Marker>
-        </Map>
+              <span> You are here! </span>{" "}
+            </Popup>{" "}
+          </Marker>{" "}
+        </Map>{" "}
       </div>
     );
   }

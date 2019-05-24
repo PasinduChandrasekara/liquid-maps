@@ -5,8 +5,17 @@ import App from "./App";
 import MapComponent from "./components/Map";
 import * as serviceWorker from "./serviceWorker";
 import "leaflet-control-geocoder/dist/Control.Geocoder.js";
+import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 
-ReactDOM.render(<MapComponent />, document.getElementById("root"));
+const routing = (
+  <Router>
+    <div>
+      <Route path="/:authenticated?" component={MapComponent} />
+    </div>
+  </Router>
+);
+
+ReactDOM.render(routing, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
